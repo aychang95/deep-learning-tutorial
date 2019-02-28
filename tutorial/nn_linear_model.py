@@ -28,11 +28,9 @@ loss_fn = torch.nn.MSELoss(reduction="sum")
 for i in range(2000):
     y_pred = model(x)
 
-    import pdb; pdb.set_trace()
 
     loss = loss_fn(y_pred, y)
     print(i, loss.item())
-    print(y_pred)
     model.zero_grad()
 
     loss.backward()
