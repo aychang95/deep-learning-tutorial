@@ -10,10 +10,6 @@ H_2 = 100  # Dimension of second hidden layer
 label_dim = 10  # Dimension of label, the output/answer corresponding to your initial data of dim of 1000
 learning_rate = 1e-6
 
-def initialize_uniform_weights(weights, in_dim):
-    k_sqrt = in_dim ** (-.5)
-    return weights * (2 * k_sqrt) - k_sqrt
-
 # Create dummy data and labels
 x = np.random.randn(N, data_dim)  # Our data in the shape of a 128 X 1000 tensor
 y = np.random.randn(N, label_dim)  # Our corresponding labels in the shape of a 128 X 10 tensor
@@ -24,7 +20,7 @@ w_2 = np.random.randn(H_1, H_2)  # Second layer in the shape of a 2000 X 100 ten
 w_3 = np.random.randn(H_2, label_dim)  # Third layer in the shape of a 100 X 10 tensor
 
 # On to the training
-for i in range(2000):
+for i in range(1000):
     # Start with the forward pass
     h_1 = x.dot(w_1)  # MatMul between data and weights of the first layer with shape 128 X 2000
     h_1_relu = np.maximum(h_1, 0)  # Non-linear ReLU layer
@@ -34,12 +30,12 @@ for i in range(2000):
 
 
     # Use a loss function to see how well it did (in this case we use the residual sum of squares)
-    loss = (1/1280)*(np.square(y_pred - y).sum())  # This is a scalar representing our loss score...lower the better. shape: scalar
+    loss = (np.square(y_pred - y).sum())  # This is a scalar representing our loss score...lower the better. shape: scalar
     print(f"Loss is: {loss}")
     print(f"Step is : {i}")
 
     # Time to backpropagate which will compute the gradients for our weights
-    y_pred_gradient = (1/640) * (y_pred - y)  # Find derivative of loss in respect to y_pred: dloss/dy_pred with shape 128 X 10
+    y_pred_gradient = (y_pred - y)  # Find derivative of loss in respect to y_pred: dloss/dy_pred with shape 128 X 10
     w_3_gradient = h_2_relu.T.dot(y_pred_gradient)  # Find derivative of y_pred in respect to w_3 and apply chain rule with shape 100 X 10
 
     h_2_relu_gradient = y_pred_gradient.dot(w_3.T)  # Find derivative of h_2_relu in respect to w_2 with shape 128 X 100
@@ -57,6 +53,10 @@ for i in range(2000):
     w_1 -= learning_rate*w_1_gradient
     w_2 -= learning_rate*w_2_gradient
     w_3 -= learning_rate*w_3_gradient
+
+    print(w_1_gradient[0])
+    print(w_2_gradient[0])
+    print(w_3_gradient[0])
 
     #print(w_1, w_2)
 
