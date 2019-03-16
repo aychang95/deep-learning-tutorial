@@ -49,16 +49,10 @@ for i in range(1000):
     w_1_gradient = x.T.dot(h_1_relu_gradient)  # Chain rule applied all the way to the end with shape 1000 X 2000
 
     # Update weights at specified rate
-    #print(w_1_gradient, w_2_gradient)
     w_1 -= learning_rate*w_1_gradient
     w_2 -= learning_rate*w_2_gradient
     w_3 -= learning_rate*w_3_gradient
 
-    print(w_1_gradient[0])
-    print(w_2_gradient[0])
-    print(w_3_gradient[0])
-
-    #print(w_1, w_2)
 
 def forward_pass():
     h_1 = x.dot(w_1)
